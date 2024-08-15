@@ -1,0 +1,50 @@
+name: celeritas
+services:
+
+  #  start Postgres, and ensure that data is stored to a mounted volume
+  postgres:
+    image: 'postgres:13.4'
+    ports:
+      - "5432:5432"
+    restart: always
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: password
+      POSTGRES_DB: celeritas
+    volumes:
+      - ./db-data/postgres/:/var/lib/postgresql/data/
+
+  #  start Redis, and ensure that data is stored to a mounted volume
+  redis:
+    image: 'redis:alpine'
+    ports:
+      - "6379:6379"
+    restart: always
+    volumes:
+      - ./db-data/redis/:/data
+
+  #  start MariaDB, and ensure that data is stored to a mounted volume
+  mariadb:
+    image: 'mariadb:11'
+    ports:
+      - "3306:3306"
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: password
+      MYSQL_DATABASE: celeritas
+      MYSQL_USER: mariadb
+      MYSQL_PASSWORD: password
+      MYSQL_DEFAULT_TIME_ZONE: +00:00
+
+    volumes:
+      - ./db-data/mariadb:/var/lib/mysql/celeritas
+
+  #  start mailHog
+  mailHog:
+    # noinspection SpellCheckingInspection
+    image: mailhog/mailhog
+    logging:
+      driver: 'none'  # disable saving logs
+    ports:
+      - 1025:1025 # smtp server
+      - 8025:8025 # web ui
