@@ -2,8 +2,9 @@ package handlers
 
 import (
 	"context"
-	"github.com/johnwr-response/celeritas"
 	"net/http"
+
+	"github.com/john-wraa/celeritas"
 )
 
 func (h *Handlers) render(w http.ResponseWriter, r *http.Request, tmpl string, variables, data interface{}) error {

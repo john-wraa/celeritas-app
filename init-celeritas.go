@@ -1,12 +1,13 @@
 package main
 
 import (
-	"github.com/johnwr-response/celeritas"
 	"log"
 	"myapp/data"
 	"myapp/handlers"
 	"myapp/middleware"
 	"os"
+
+	"github.com/john-wraa/celeritas"
 )
 
 func initApplication() *application {

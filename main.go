@@ -1,10 +1,11 @@
 package main
 
 import (
-	"github.com/johnwr-response/celeritas"
 	"myapp/data"
 	"myapp/handlers"
 	"myapp/middleware"
+
+	"github.com/john-wraa/celeritas"
 )
 
 type application struct {

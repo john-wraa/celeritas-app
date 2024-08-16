@@ -1,8 +1,9 @@
 package middleware
 
 import (
-	"github.com/johnwr-response/celeritas"
 	"myapp/data"
+
+	"github.com/john-wraa/celeritas"
 )
 
 type Middleware struct {

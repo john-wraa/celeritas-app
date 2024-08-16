@@ -5,7 +5,7 @@ import (
 	"net/http"
 	"time"
 
-	"github.com/johnwr-response/celeritas"
+	"github.com/john-wraa/celeritas"
 )
 
 type Handlers struct {
