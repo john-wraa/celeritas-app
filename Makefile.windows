@@ -2,13 +2,9 @@ SHELL=cmd
 BINARY_NAME=celeritasApp.exe
 CLI_NAME=celeritas.exe
 
-## build: builds all binaries
-build: clean build_myapp
-	@echo All binaries built!
-
 ## build_myapp: builds the application
-build_myapp:
-	@go build -o dist/${BINARY_NAME} ./myapp
+build:
+	@go build -o dist/${BINARY_NAME} .
 	@echo Celeritas built!
 
 ## clean: cleans all binaries and runs go clean
