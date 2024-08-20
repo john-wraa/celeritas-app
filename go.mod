@@ -6,7 +6,6 @@ require (
 	github.com/CloudyKit/jet/v6 v6.2.0
 	github.com/alexedwards/scs/v2 v2.8.0
 	github.com/go-chi/chi/v5 v5.1.0
-	github.com/john-wraa/celeritas v1.0.0
 	github.com/upper/db/v4 v4.2.1
 )
 
