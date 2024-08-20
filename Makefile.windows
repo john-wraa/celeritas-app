@@ -1,76 +1,31 @@
-SHELL=cmd
 BINARY_NAME=celeritasApp.exe
-CLI_NAME=celeritas.exe
 
-## build_myapp: builds the application
+## build: builds all binaries
 build:
-	@go build -o dist/${BINARY_NAME} .
+    @go build -o tmp/${BINARY_NAME} .
 	@echo Celeritas built!
 
-## clean: cleans all binaries and runs go clean
-clean:
-	@echo Cleaning...
-	@echo y | DEL /S dist
-	@go clean
-	@echo Cleaned and deleted binaries
-
-run: build
-	@echo Starting Celeritas...
-	set dummy=dummy&& start /B .\dist\${BINARY_NAME}
+run:
+	@echo Staring Celeritas...
+    @start /min cmd /c tmp\${BINARY_NAME} &
 	@echo Celeritas started!
 
-run_foreground: build
-	@echo Starting Celeritas...
-	@.\dist\${BINARY_NAME} &
-	@echo Celeritas started in foreground!
-
-
-start: run
-
-start_fg: run_foreground
-
-stop:
-	@taskkill /IM ${BINARY_NAME} /F  /FI "MemUsage gt 2"
-	@echo Stopped Celeritas
-
-restart: stop start
-
-restart_fg: stop start_fg
-
-start_compose:
-	docker-compose --project-directory docker up -d
-
-stop_compose:
-	docker-compose --project-directory docker down
+clean:
+	@echo Cleaning...
+	@DEL ${BINARY_NAME}
+	@go clean
+	@echo Cleaned!
 
 test:
 	@echo Testing...
-	@go test -v ./...
+	@go test ./...
 	@echo Done!
 
-test_integration:
-	@echo Testing integration...
-	@go test -v ./... --tags integration --count=1
-	@echo Done!
+start: run
+	
+stop:
+	@echo "Starting the front end..."
+	@taskkill /IM ${BINARY_NAME} /F
+	@echo Stopped Celeritas
 
-test_cover:
-	@echo Testing cover...
-	@go test '-coverprofile=coverage.out' ./...
-	@go tool cover '-html=coverage.out'
-	@echo Done!
-
-test_integration_cover:
-	@echo Testing integration cover...
-	@go test '-coverprofile=coverage.out' ./... --tags integration --count=1
-	@go tool cover '-html=coverage.out'
-	@echo Done!
-
-test_integration_coverage:
-	@echo Testing integration coverage...
-	@go test -cover ./... --tags integration --count=1
-	@echo Done!
-
-test_coverage:
-	@echo Testing coverage...
-	@go test -cover ./...
-	@echo Done!
+restart: stop start

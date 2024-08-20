@@ -10,19 +10,22 @@ import (
 	"github.com/upper/db/v4/adapter/postgresql"
 )
 
-// var db *sql.DB
+//goland:noinspection GoUnusedGlobalVariable
+var db *sql.DB
 var upper db2.Session
 
+// Models is the wrapper for all database models
 type Models struct {
-	// Any models inserted here (and in the new() function)
+	// any models inserted here (and in the New function)
 	// are easily accessible throughout the entire application
 }
 
+// New initializes the models package for use
 func New(databasePool *sql.DB) Models {
-	//db = databasePool
+	db = databasePool
 
 	switch os.Getenv("DATABASE_TYPE") {
-	case "mysql", "mysqldb", "mariadb", "maria:":
+	case "mysql", "mariadb":
 		upper, _ = mysql.New(databasePool)
 	case "postgres", "postgresql":
 		upper, _ = postgresql.New(databasePool)
@@ -33,10 +36,12 @@ func New(databasePool *sql.DB) Models {
 	return Models{}
 }
 
-func GetInsertID(i db2.ID) int {
+// getInsertID returns the integer value of a newly inserted id (using upper)
+func getInsertID(i db2.ID) int {
 	idType := fmt.Sprintf("%T", i)
 	if idType == "int64" {
 		return int(i.(int64))
 	}
-	return int(i.(int32))
+
+	return i.(int)
 }

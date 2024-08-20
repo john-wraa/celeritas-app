@@ -7,7 +7,7 @@ import (
 	"myapp/middleware"
 	"os"
 
-	"github.com/john-wraa/celeritas"
+	"github.com/tsawler/celeritas"
 )
 
 func initApplication() *application {
@@ -22,11 +22,13 @@ func initApplication() *application {
 	if err != nil {
 		log.Fatal(err)
 	}
+
 	cel.AppName = "myapp"
 
 	myMiddleware := &middleware.Middleware{
 		App: cel,
 	}
+
 	myHandlers := &handlers.Handlers{
 		App: cel,
 	}
@@ -36,10 +38,10 @@ func initApplication() *application {
 		Handlers:   myHandlers,
 		Middleware: myMiddleware,
 	}
+
 	app.App.Routes = app.routes()
 
 	app.Models = data.New(app.App.DB.Pool)
-
 	myHandlers.Models = app.Models
 	app.Middleware.Models = app.Models
 

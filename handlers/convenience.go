@@ -4,7 +4,7 @@ import (
 	"context"
 	"net/http"
 
-	"github.com/john-wraa/celeritas"
+	"github.com/tsawler/celeritas"
 )
 
 func (h *Handlers) render(w http.ResponseWriter, r *http.Request, tmpl string, variables, data interface{}) error {
@@ -41,6 +41,7 @@ func (h *Handlers) randomString(n int) string {
 
 func (h *Handlers) encrypt(text string) (string, error) {
 	enc := celeritas.Encryption{Key: []byte(h.App.EncryptionKey)}
+
 	encrypted, err := enc.Encrypt(text)
 	if err != nil {
 		return "", err
@@ -50,6 +51,7 @@ func (h *Handlers) encrypt(text string) (string, error) {
 
 func (h *Handlers) decrypt(crypto string) (string, error) {
 	enc := celeritas.Encryption{Key: []byte(h.App.EncryptionKey)}
+
 	decrypted, err := enc.Decrypt(crypto)
 	if err != nil {
 		return "", err

@@ -1,7 +1,7 @@
 name: celeritas
 services:
 
-  #  start Postgres, and ensure that data is stored to a mounted volume
+#  start Postgres, and ensure that data is stored to a mounted volume
   postgres:
     image: 'postgres:13.4'
     ports:
@@ -12,7 +12,7 @@ services:
       POSTGRES_PASSWORD: password
       POSTGRES_DB: celeritas
     volumes:
-      - ./db-data/postgres/:/var/lib/postgresql/data/
+      - ./docker-data/postgres/:/var/lib/postgresql/data/
 
   #  start Redis, and ensure that data is stored to a mounted volume
   redis:
@@ -21,11 +21,39 @@ services:
       - "6379:6379"
     restart: always
     volumes:
-      - ./db-data/redis/:/data
+      - ./docker-data/redis/:/data
+
+  #  start sftp webdav, and admin interface; ensure that data is stored to a mounted volume
+  sftp:
+    image: 'drakkan/sftpgo:latest'
+    ports:
+      - "8080:8080"
+      - "2022:2022"
+      - "10080:10080"
+    restart: always
+    environment:
+      SFTPGO_WEBDAVD__BINDINGS__0__PORT: 10080
+    volumes:
+      - ./docker-data/sftp/:/mnt/data/
+      - ./docker-data/home/:/var/lib/sftpgo
+
+  #  start minio, and ensure that data is stored to a mounted volume
+  minio:
+    image: 'quay.io/minio/minio'
+    command: server /mnt/data --console-address ":9001"
+    ports:
+      - "8000:9000"
+      - "9001:9001"
+    restart: always
+    environment:
+      MINIO_ROOT_USER: root
+      MINIO_ROOT_PASSWORD: password
+    volumes:
+      - ./docker-data/minio/:/mnt/data/
 
   #  start MariaDB, and ensure that data is stored to a mounted volume
   mariadb:
-    image: 'mariadb:11'
+    image: 'mariadb:10.6'
     ports:
       - "3306:3306"
     restart: always
@@ -34,17 +62,6 @@ services:
       MYSQL_DATABASE: celeritas
       MYSQL_USER: mariadb
       MYSQL_PASSWORD: password
-      MYSQL_DEFAULT_TIME_ZONE: +00:00
 
     volumes:
-      - ./db-data/mariadb:/var/lib/mysql/celeritas
-
-  #  start mailHog
-  mailHog:
-    # noinspection SpellCheckingInspection
-    image: mailhog/mailhog
-    logging:
-      driver: 'none'  # disable saving logs
-    ports:
-      - 1025:1025 # smtp server
-      - 8025:8025 # web ui
+      - ./docker-data/mariadb/:/var/lib/mysql
