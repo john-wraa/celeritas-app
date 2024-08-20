@@ -1,18 +1,24 @@
-BINARY_NAME=celeritasApp.exe
+APP_NAME=myapp
+BINARY_NAME=${APP_NAME}.exe
 
 ## build: builds all binaries
 build:
-    @go build -o tmp/${BINARY_NAME} .
+	@go build -o dist/${BINARY_NAME} .
 	@echo Celeritas built!
 
 run:
-	@echo Staring Celeritas...
-    @start /min cmd /c tmp\${BINARY_NAME} &
+	@echo Starting Celeritas...
+	@start /min cmd /c .\dist\${BINARY_NAME} &
+	@echo Celeritas started!
+
+run_fg:
+	@echo Starting Celeritas...
+	@.\dist\${BINARY_NAME}
 	@echo Celeritas started!
 
 clean:
 	@echo Cleaning...
-	@DEL ${BINARY_NAME}
+	@echo y | DEL /S dist
 	@go clean
 	@echo Cleaned!
 
@@ -25,7 +31,7 @@ start: run
 	
 stop:
 	@echo "Starting the front end..."
-	@taskkill /IM ${BINARY_NAME} /F
+	@taskkill /IM ${BINARY_NAME} /F  /FI "MemUsage gt 2"
 	@echo Stopped Celeritas
 
 restart: stop start
