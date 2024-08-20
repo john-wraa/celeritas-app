@@ -1,7 +1,7 @@
 package handlers
 
 import (
-	"github.com/tsawler/celeritas"
+	"github.com/john-wraa/celeritas"
 	"myapp/data"
 	"net/http"
 )

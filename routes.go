@@ -3,7 +3,7 @@ package main
 import (
 	"net/http"
 
-	"github.com/tsawler/celeritas"
+	"github.com/john-wraa/celeritas"
 
 	"github.com/go-chi/chi/v5"
 )
